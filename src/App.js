@@ -6,22 +6,24 @@ import { Auth } from "./Pages/Auth";
 //HashRouter
 
 function AppRouter() {
+   //<div className="container"></div>
    return (
-      <div className="container">
-         <Router>
-            <div>
-               <nav className="nav">
+      <Router>
+         <div>
+            <nav className="nav">
+               <div className="container">
                   <Link className="link" to="/">Home</Link>
                   <Link className="link" to="/cities">Cities</Link>
                   <Link className="link auth-link aside" to="/auth">Auth</Link>
-               </nav>
-            </div>
-
+               </div>
+            </nav>
+         </div>
+         <div className="container__content">
             <Route path="/" exact component={Index} />
             <Route path="/cities" component={Cities} />
             <Route path="/auth" component={Auth} />
-         </Router>
-      </div>
+         </div>
+      </Router>
    )
 }
 

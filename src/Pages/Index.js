@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 export function Index() {
    const [city, setCity] = useState(null);
-   const [temp, setTemp] = useState(null);
+   const [{ temp, description }, setInfo] = useState({ temp: null, description: null });
 
    const API_key = "c47a67513f793be01fd78b932ab39567";
 
@@ -13,12 +13,15 @@ export function Index() {
             console.log(data);
             if (data.status === "success") {
                setCity(data.city)
-               fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${data.lat}&lon=${data.lon}&appid=${API_key}&units=metric`)
+               fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${data.lat}&lon=${data.lon}&appid=${API_key}&units=metric&lang=ru`)
                   .then(response => response.json())
                   .then(data => {
                      console.log(data);
                      console.log("temp", data.main.temp);
-                     setTemp(data.main.temp);
+                     data.main.temp > 0
+                        ? setInfo({ temp: `+${data.main.temp}`, description: data.weather[0].description })
+                        : setInfo({ temp: `+${data.main.temp}`, description: data.weather[0].description });
+                     //setTemp(data.main.temp);
                   });
             }
          })
@@ -29,9 +32,13 @@ export function Index() {
    }, [])
 
    return (
-      <div>
-         <h1>Current weather</h1>
-         {(city && temp) ? <h1>{city} {temp}</h1> : ""}
+      <div id="weather">
+         <p id="weather__title">Текущая погода</p>
+         {(city && temp)
+            ? <p>{city}
+               <span id="weather__description">{temp} {description}</span>
+            </p>
+            : ""}
       </div>
    )
 }
