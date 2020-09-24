@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";//{ useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";//{ useContext } from "react";
+import { UserContext } from "../UserContext";
+import { Redirect } from 'react-router';
 
 const API_key = "c47a67513f793be01fd78b932ab39567";
 
 export function Cities() {
    const [city_name, setCityName] = useState("");
    const [favCities, setFavCities] = useState(["Севастополь", "Tel-aviv", "Александровск-Сахалинский"]);
+   const { isAuthed, setIsAuthed } = useContext(UserContext);
 
    useEffect(() => {
       //getCities from LocalStorage
@@ -15,39 +18,48 @@ export function Cities() {
       e.preventDefault();
       console.log(city_name);
       let currentListOfCities = [...favCities, city_name];
+      updateCitiesList(currentListOfCities);
+      setCityName("");
+   }
+
+   const updateCitiesList = (currentListOfCities) => {
       setFavCities(currentListOfCities);
       localStorage.setItem('favCities', JSON.stringify(currentListOfCities));
-      setCityName("");
    }
 
    const removefavCity = idx => {
       let currentListOfCities = favCities.filter((value, index) => index !== idx);
-      setFavCities(currentListOfCities);
-      localStorage.setItem('favCities', JSON.stringify(currentListOfCities));
+      updateCitiesList(currentListOfCities);
    }
 
-   return (
-      <div id="grid_2-columns">
-         <div className="left_column">
-            <form onSubmit={handleSubmit} className="form">
-               <input
-                  className="form__input"
-                  name="text"
-                  value={city_name}
-                  onChange={e => setCityName(e.target.value)}
-                  placeholder="Введите название города..."
-               />
-            </form>
-         </div>
+   if (!isAuthed) {
+      return <Redirect to="/logIn" />;
+   }
+   else {
+      return (
+         <div id="grid_2-columns">
+            <div className="left_column">
+               <form onSubmit={handleSubmit} className="form">
+                  <input
+                     className="form__input"
+                     name="text"
+                     value={city_name}
+                     onChange={e => setCityName(e.target.value)}
+                     placeholder="Введите название города..."
+                  />
+                  <button onClick={handleSubmit}>Добавить</button>
+               </form>
+            </div>
 
-         <div>
-            {favCities.map((city, idx) => {
-               return <Card city={city} key={`${city}${idx}`} removeCard={() => removefavCity(idx)} />
-            }
-            )}
+            <div>
+               {favCities.map((city, idx) => {
+                  return <Card city={city} key={`${city}${idx}`} removeCard={() => removefavCity(idx)} />
+               }
+               )}
+            </div>
          </div>
-      </div>
-   )
+      )
+   }
 }
 
 function Card(props) {
@@ -63,8 +75,6 @@ function Card(props) {
          });
 
    }, [])
-
-   //<button className="cityCard__remove" onClick={() => props.removeCard(props.i)}>x</button>
 
    return (
       <div className="cityCard">

@@ -33,11 +33,11 @@ export function Index() {
 
    return (
       <div id="weather">
-         <p id="weather__title">Текущая погода</p>
-         {(city && temp)
-            ? <p>{city}
-               <span id="weather__description">{temp} {description}</span>
-            </p>
+         {(city && temp) ?
+            (<div><p id="weather__title">Текущая погода</p>
+               <p>{city}
+                  <span id="weather__description">{temp} ({description})</span>
+               </p></div>)
             : ""}
       </div>
    )
