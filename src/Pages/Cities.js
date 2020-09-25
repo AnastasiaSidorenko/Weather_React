@@ -6,7 +6,7 @@ const API_key = "c47a67513f793be01fd78b932ab39567";
 
 export function Cities() {
    const [city_name, setCityName] = useState("");
-   const [favCities, setFavCities] = useState(["Севастополь", "Tel-aviv", "Александровск-Сахалинский"]);
+   const [favCities, setFavCities] = useState([]);
    const { isAuthed, setIsAuthed } = useContext(UserContext);
 
    useEffect(() => {
@@ -32,10 +32,7 @@ export function Cities() {
       updateCitiesList(currentListOfCities);
    }
 
-   if (!isAuthed) {
-      return <Redirect to="/logIn" />;
-   }
-   else {
+   if (isAuthed === true) {
       return (
          <div id="grid_2-columns">
             <div className="left_column">
@@ -60,18 +57,24 @@ export function Cities() {
          </div>
       )
    }
+   else {
+      return <Redirect to="/logIn" />;
+   }
 }
 
 function Card(props) {
    const [temp, setTemp] = useState(null);
 
    useEffect(() => {
-      fetch(`http://api.openweathermap.org/data/2.5/weather?q=${props.city}&appid=${API_key}&units=metric `)
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${props.city}&appid=${API_key}&units=metric `)
          .then(response => response.json())
          .then(data => {
-            console.log(data);
-            console.log("temp", data.main.temp);
-            data.main.temp > 0 ? setTemp(`+${data.main.temp}`) : setTemp(`+${data.main.temp}`);
+            if (data.main) {
+               data.main.temp > 0 ? setTemp(`+${data.main.temp}`) : setTemp(`+${data.main.temp}`);
+            }
+            else {
+               setTemp("не найден");
+            }
          });
 
    }, [])

@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from "react";//{ useContext } from "react";
+import React, { useContext } from "react";//{ useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
 export function LogIn() {
 
-   const { isAuthed, setIsAuthed } = useContext(UserContext);
+   const { setIsAuthed } = useContext(UserContext);
 
    const history = useHistory();
 

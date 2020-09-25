@@ -9,7 +9,6 @@ export function LogOut() {
    useEffect(() => {
       localStorage.setItem('isAuthed', false);
       setIsAuthed(false);
-      console.log("isAuthed");
    }, []);
 
    return <Redirect to="/" />

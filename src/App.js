@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Index } from "./Pages/Index";
 import { Cities } from "./Pages/Cities";
-import { Auth } from "./Pages/Auth";
 import { LogIn } from "./Pages/LogIn";
 import { LogOut } from "./Pages/LogOut";
 import { UserContext } from "./UserContext";
